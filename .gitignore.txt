@@ -1,0 +1,17 @@
+*.lck
+*.bak
+*.bck
+*-backups/
+.history/
+*.kicad_pcb-bak
+*.kicad_sch-bak
+fabrication/
+production/
+jlcpcb/
+gerbers/
+bom/
+pos/
+*.zip
+.DS_Store
+Thumbs.db
+desktop.ini
