@@ -1,0 +1,9 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "UCC27211D") (type "KiCad") (uri "C:/Users/brmey/Downloads/UCC27211D/UCC27211D.kicad_sym") (options "") (descr ""))
+	(lib (name "NUCLEO-G474RE") (type "KiCad") (uri "C:/Users/brmey/Downloads/NUCLEO-G474RE/NUCLEO-G474RE.kicad_sym") (options "") (descr ""))
+	(lib (name "FET") (type "KiCad") (uri "C:/Users/brmey/Downloads/ul_BSC066N06NSATMA1/KiCADv6/2026-04-07_16-48-13.kicad_sym") (options "") (descr ""))
+	(lib (name "INA199A2DCKR") (type "KiCad") (uri "C:/Users/brmey/Downloads/INA199A2DCKR/INA199A2DCKR.kicad_sym") (options "") (descr ""))
+	(lib (name "TLV3603") (type "KiCad") (uri "C:/Users/brmey/Downloads/ul_TLV3603DCKR-ET/KiCADv6/2026-04-09_04-41-18.kicad_sym") (options "") (descr ""))
+	(lib (name "INA241A3") (type "KiCad") (uri "C:/Users/brmey/Downloads/INA241A3IDDFR/KiCADv6/2026-04-16_15-24-27.kicad_sym") (options "") (descr ""))
+)
