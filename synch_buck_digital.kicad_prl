@@ -1,10 +1,29 @@
 {
   "board": {
-    "active_layer": 0,
+    "active_layer": 25,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
-    "hidden_nets": [],
+    "hidden_nets": [
+      "+5V",
+      "PGND",
+      "/V_FB",
+      "/PWM_LS",
+      "/DT_REF",
+      "/PROT_REF",
+      "/PROT_OUT",
+      "/SENSE_OUT",
+      "/PWM_HS",
+      "/COMP_OUT",
+      "Net-(U_OC1-*LE{slash}HYS)",
+      "Net-(U3-IN+)",
+      "/BOOT",
+      "/SHUNT_N",
+      "/SHUNT_P",
+      "Net-(U3-IN-)",
+      "Net-(U_DT1-IN+)",
+      "Net-(U_DT1-*LE{slash}HYS)"
+    ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
     "opacity": {
@@ -53,7 +72,7 @@
       "board_outline_area",
       "ly_points"
     ],
-    "visible_layers": "ffffffff_ffffffff_ffffffff_ffffffff",
+    "visible_layers": "ffffffff_ffffffff_ffffffff_ffffffdf",
     "zone_display_mode": 0
   },
   "git": {
