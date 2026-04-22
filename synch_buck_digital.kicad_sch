@@ -552,8 +552,8 @@
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "J3"
-				(at 0.254 -34.036 0)
+			(property "Reference" "J_STM1"
+				(at 0.508 9.144 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -563,7 +563,7 @@
 				)
 			)
 			(property "Value" "Conn_01x13"
-				(at 0.254 -31.496 0)
+				(at 0.508 11.684 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -572,7 +572,7 @@
 					)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x13_P2.54mm_Vertical"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -887,9 +887,9 @@
 					)
 				)
 				(pin passive line
-					(at -8.89 5.08 0)
+					(at -8.89 0 0)
 					(length 3.81)
-					(name "Pin_1"
+					(name "Pin_3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -905,9 +905,9 @@
 					)
 				)
 				(pin passive line
-					(at -8.89 2.54 0)
+					(at -8.89 -12.7 0)
 					(length 3.81)
-					(name "Pin_2"
+					(name "Pin_8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -923,9 +923,9 @@
 					)
 				)
 				(pin passive line
-					(at -8.89 0 0)
+					(at -8.89 -5.08 0)
 					(length 3.81)
-					(name "Pin_3"
+					(name "Pin_5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -959,9 +959,9 @@
 					)
 				)
 				(pin passive line
-					(at -8.89 -5.08 0)
+					(at -8.89 5.08 0)
 					(length 3.81)
-					(name "Pin_5"
+					(name "Pin_1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -969,24 +969,6 @@
 						)
 					)
 					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -8.89 -7.62 0)
-					(length 3.81)
-					(name "Pin_6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1004,6 +986,24 @@
 							)
 						)
 					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -8.89 -7.62 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
 					(number "7"
 						(effects
 							(font
@@ -1013,9 +1013,9 @@
 					)
 				)
 				(pin passive line
-					(at -8.89 -12.7 0)
+					(at -8.89 2.54 0)
 					(length 3.81)
-					(name "Pin_8"
+					(name "Pin_2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -7936,7 +7936,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 198.12 208.28 90)
+		(at 201.93 208.28 90)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -7948,7 +7948,7 @@
 		(fields_autoplaced yes)
 		(uuid "56d66057-db13-47d1-b2d0-c20e20239c5c")
 		(property "Reference" "#PWR013"
-			(at 204.47 208.28 0)
+			(at 208.28 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7959,7 +7959,7 @@
 			)
 		)
 		(property "Value" "SGND"
-			(at 201.93 208.2801 90)
+			(at 205.74 208.2801 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7970,7 +7970,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 198.12 208.28 0)
+			(at 201.93 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7981,7 +7981,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 198.12 208.28 0)
+			(at 201.93 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7992,7 +7992,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 198.12 208.28 0)
+			(at 201.93 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9706,6 +9706,85 @@
 			(project "synch_buck_digital"
 				(path "/9ffc6758-015a-4fde-b1f2-cf26f16b4b89"
 					(reference "C_OUT_LF1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 198.12 208.28 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "854eab26-bec3-4b4b-a088-8dfe9e0572bb")
+		(property "Reference" "R1"
+			(at 198.12 211.074 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0R"
+			(at 198.12 213.106 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 198.374 207.264 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 198.12 208.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 198.12 208.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "85a777e0-9e34-42e8-9988-2242f12b2df6")
+		)
+		(pin "2"
+			(uuid "ec782bf8-9f88-4997-bc92-f1facc9f7413")
+		)
+		(instances
+			(project "synch_buck_digital"
+				(path "/9ffc6758-015a-4fde-b1f2-cf26f16b4b89"
+					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -12873,7 +12952,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 198.12 208.28 270)
+		(at 194.31 208.28 270)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -12885,7 +12964,7 @@
 		(fields_autoplaced yes)
 		(uuid "fa456501-4bb7-40df-ae76-76bafcf2146a")
 		(property "Reference" "#PWR014"
-			(at 191.77 208.28 0)
+			(at 187.96 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12896,7 +12975,7 @@
 			)
 		)
 		(property "Value" "PGND"
-			(at 194.31 208.2801 90)
+			(at 190.5 208.2801 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12907,7 +12986,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 198.12 208.28 0)
+			(at 194.31 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12918,7 +12997,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 198.12 208.28 0)
+			(at 194.31 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12929,7 +13008,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 198.12 208.28 0)
+			(at 194.31 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
