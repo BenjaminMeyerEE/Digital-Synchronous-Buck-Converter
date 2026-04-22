@@ -1,14 +1,14 @@
 {
   "board": {
-    "active_layer": 25,
+    "active_layer": 0,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
     "hidden_nets": [
+      "SGND",
       "PGND",
       "Net-(U_UCC1-HO)",
-      "Net-(U_UCC1-LO)",
-      "SGND"
+      "Net-(U_UCC1-LO)"
     ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
@@ -18,7 +18,7 @@
       "shapes": 1.0,
       "tracks": 1.0,
       "vias": 1.0,
-      "zones": 0.6
+      "zones": 0.5299999713897705
     },
     "prototype_zone_fills": false,
     "selection_filter": {

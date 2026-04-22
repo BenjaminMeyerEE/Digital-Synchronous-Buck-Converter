@@ -500,7 +500,27 @@
     "meta": {
       "version": 5
     },
-    "net_colors": null,
+    "net_colors": {
+      "+12V": "rgb(83, 0, 0)",
+      "+5V": "rgb(74, 0, 0)",
+      "/COMP_OUT": "rgb(91, 255, 34)",
+      "/DT_REF": "rgb(93, 255, 42)",
+      "/GATE_HS": "rgb(185, 0, 255)",
+      "/GATE_LS": "rgb(209, 0, 255)",
+      "/PROT_OUT": "rgb(110, 255, 41)",
+      "/PROT_REF": "rgb(108, 255, 53)",
+      "/PWM_HS": "rgb(83, 255, 19)",
+      "/PWM_LS": "rgb(70, 255, 19)",
+      "/SENSE_OUT": "rgb(89, 255, 41)",
+      "/SHUNT_N": "rgb(255, 159, 26)",
+      "/SHUNT_P": "rgb(255, 156, 32)",
+      "/SW": "rgb(180, 165, 0)",
+      "/V_FB": "rgb(109, 255, 52)",
+      "Net-(U_UCC1-HO)": "rgb(255, 0, 253)",
+      "Net-(U_UCC1-LO)": "rgb(213, 42, 255)",
+      "PGND": "rgb(36, 5, 255)",
+      "SGND": "rgb(88, 255, 224)"
+    },
     "netclass_assignments": null,
     "netclass_patterns": []
   },
