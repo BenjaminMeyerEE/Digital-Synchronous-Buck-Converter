@@ -312,7 +312,7 @@
 	(footprint "Capacitor_SMD:C_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "05400180-2abe-4fbb-ae7d-7b964f6699f9")
-		(at 233.83 97.8525 90)
+		(at 233.47 92.04 90)
 		(descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor")
 		(property "Reference" "C_VFB_FILT1"
@@ -637,7 +637,7 @@
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x13_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(uuid "0ddadfce-5896-4468-b2a6-cfe02581e8b3")
-		(at 195.48 110.21 90)
+		(at 192.04 99.63 90)
 		(descr "Through hole straight pin header, 1x13, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x13 2.54mm single row")
 		(property "Reference" "J_STM1"
@@ -999,7 +999,7 @@
 	(footprint "TLV3603:SC70_DCK_TEX"
 		(layer "F.Cu")
 		(uuid "1963c1be-29f6-4096-91c8-f96e6fc94c5f")
-		(at 187.90755 100.159999)
+		(at 188.03755 88.999999)
 		(tags "TLV3603DCKR-ET ")
 		(property "Reference" "U_OC1"
 			(at 0 0 0)
@@ -2516,7 +2516,7 @@
 	(footprint "Resistor_SMD:R_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "45924c07-6670-4cb6-ac5b-2a959fe0d049")
-		(at 230.83 93.2325 -90)
+		(at 230.47 87.42 -90)
 		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R2_VFB1"
@@ -2832,7 +2832,7 @@
 	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "55bdf7de-0798-4cfa-94f8-f8d9788079b8")
-		(at 193.78 98.28 90)
+		(at 193.91 87.12 90)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C_OC_1U1"
@@ -3798,7 +3798,7 @@
 	(footprint "Capacitor_SMD:C_0402_1005Metric"
 		(layer "F.Cu")
 		(uuid "65d1d7fe-36e1-437f-9ab4-cd48bdb5f868")
-		(at 192.3 99.02 90)
+		(at 192.43 87.86 90)
 		(descr "Capacitor SMD 0402 (1005 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor")
 		(property "Reference" "C_OC_10N1"
@@ -4114,7 +4114,7 @@
 	(footprint "Resistor_SMD:R_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "709a44f4-81a0-41fe-9944-01906a6b181e")
-		(at 191.985 101.84 180)
+		(at 192.115 90.68 180)
 		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R_HYS1"
@@ -5974,7 +5974,7 @@
 	(footprint "Diode_SMD:D_SOD-123"
 		(layer "F.Cu")
 		(uuid "80a14fb8-3be3-4adf-b811-df969b6ea379")
-		(at 237.32 98.7325 -90)
+		(at 236.96 92.92 -90)
 		(descr "SOD-123")
 		(tags "SOD-123")
 		(property "Reference" "D1"
@@ -6264,7 +6264,7 @@
 	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "84468179-96b4-4aa0-8c78-0ad608f4c0d3")
-		(at 190.8 98.25 90)
+		(at 190.93 87.09 90)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing)")
 		(tags "capacitor")
 		(property "Reference" "C_OC_100P1"
@@ -6738,13 +6738,13 @@
 	(footprint "TestPoint:TestPoint_Pad_2.0x2.0mm"
 		(layer "F.Cu")
 		(uuid "95e43296-7bac-4fb2-8a7a-26f4f713d350")
-		(at 215.51 99.83)
+		(at 207.98 89.29)
 		(descr "SMD rectangular pad as test Point, square 2.0mm side length")
 		(tags "test point SMD pad rectangle square")
 		(property "Reference" "TP1"
 			(at 0 -1.998 0)
 			(layer "F.SilkS")
-			(uuid "31982527-3373-42aa-830f-48f2649df023")
+			(uuid "76c3f55b-4610-4225-8d33-be3b1ac1af63")
 			(effects
 				(font
 					(size 1 1)
@@ -6755,7 +6755,7 @@
 		(property "Value" "TestPoint"
 			(at 0 2.05 0)
 			(layer "F.Fab")
-			(uuid "75a04f45-297c-4a18-b9cf-fd3411bf7b60")
+			(uuid "c5b98cd7-f111-4206-9e5b-4bf5c7bc2270")
 			(effects
 				(font
 					(size 1 1)
@@ -6768,7 +6768,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "ddcd9c31-4ed7-41bf-923c-d7b7f9f94211")
+			(uuid "296918cb-6dab-4ef5-8027-c4bac691e888")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6781,7 +6781,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "a8abb2b3-29bc-46ef-9c14-f7e0d13d739d")
+			(uuid "3df9bb7c-7a22-4df1-88fd-9eabced07d01")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8979,7 +8979,7 @@
 	(footprint "TestPoint:TestPoint_Pad_2.0x2.0mm"
 		(layer "F.Cu")
 		(uuid "ab200161-e98a-4bce-afa2-a296f5a0ddfe")
-		(at 224.07 98.88)
+		(at 235.05 87.29)
 		(descr "SMD rectangular pad as test Point, square 2.0mm side length")
 		(tags "test point SMD pad rectangle square")
 		(property "Reference" "TP4"
@@ -9146,7 +9146,7 @@
 	(footprint "Resistor_SMD:R_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "b8382ccd-9c41-4e92-a606-e0520804de00")
-		(at 230.87 97.8625 90)
+		(at 230.51 92.05 90)
 		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "resistor")
 		(property "Reference" "R1_VFB1"
@@ -11067,7 +11067,7 @@
 	(footprint "TestPoint:TestPoint_Pad_2.0x2.0mm"
 		(layer "F.Cu")
 		(uuid "e675c158-ee55-4aa4-8290-8f6eedf9f90b")
-		(at 206.34 97.07)
+		(at 203.86 89.32)
 		(descr "SMD rectangular pad as test Point, square 2.0mm side length")
 		(tags "test point SMD pad rectangle square")
 		(property "Reference" "TP3"
@@ -11827,7 +11827,7 @@
 	)
 	(gr_rect
 		(start 180 54)
-		(end 240 114)
+		(end 240 103.59)
 		(stroke
 			(width 0.05)
 			(type default)
@@ -11870,14 +11870,14 @@
 			(clearance 0.5)
 		)
 		(min_thickness 0.25)
-		(fill yes
+		(fill
 			(thermal_gap 0.5)
 			(thermal_bridge_width 0.5)
 			(island_removal_mode 0)
 		)
 		(polygon
 			(pts
-				(xy 180 83.75) (xy 180 114) (xy 240 114) (xy 240 84.07)
+				(xy 180 83.75) (xy 180 103.71) (xy 240 103.71) (xy 240 84.07)
 			)
 		)
 	)

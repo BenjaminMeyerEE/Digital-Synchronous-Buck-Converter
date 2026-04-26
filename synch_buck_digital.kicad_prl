@@ -6,9 +6,15 @@
     "hidden_netclasses": [],
     "hidden_nets": [
       "SGND",
+      "/V_FB",
       "PGND",
-      "Net-(U_UCC1-HO)",
-      "Net-(U_UCC1-LO)"
+      "/DT_REF",
+      "/COMP_OUT",
+      "/PROT_OUT",
+      "/PROT_REF",
+      "/PWM_LS",
+      "/PWM_HS",
+      "/SENSE_OUT"
     ],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
