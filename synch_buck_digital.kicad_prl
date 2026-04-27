@@ -4,18 +4,7 @@
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
-    "hidden_nets": [
-      "SGND",
-      "/V_FB",
-      "PGND",
-      "/DT_REF",
-      "/COMP_OUT",
-      "/PROT_OUT",
-      "/PROT_REF",
-      "/PWM_LS",
-      "/PWM_HS",
-      "/SENSE_OUT"
-    ],
+    "hidden_nets": [],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
     "opacity": {
