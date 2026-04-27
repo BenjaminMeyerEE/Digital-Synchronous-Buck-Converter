@@ -113,7 +113,6 @@
 		)
 		(capping no)
 		(filling no)
-		(zone_defaults)
 		(pcbplotparams
 			(layerselection 0x00000000_00000000_55555555_5755f5ff)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
@@ -470,7 +469,7 @@
 	(footprint "TestPoint:TestPoint_Pad_2.0x2.0mm"
 		(layer "F.Cu")
 		(uuid "0752e300-b33d-4099-9446-f16c9dfec0b6")
-		(at 219.25 73)
+		(at 221.81 69.43)
 		(descr "SMD rectangular pad as test Point, square 2.0mm side length")
 		(tags "test point SMD pad rectangle square")
 		(property "Reference" "TP2"
@@ -3315,13 +3314,13 @@
 	(footprint "Capacitor_SMD:C_1210_3225Metric"
 		(layer "F.Cu")
 		(uuid "5b7a34c4-d320-483d-89d5-20208709f559")
-		(at 231.685 65.22)
+		(at 232.425 65.23)
 		(descr "Capacitor SMD 1210 (3225 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf)")
 		(tags "capacitor")
 		(property "Reference" "C_OUT_HF1"
 			(at 0 -2.3 0)
 			(layer "F.SilkS")
-			(uuid "f29b5ae1-1797-4eca-a3c7-8fb9a3cae2ce")
+			(uuid "5b9a3641-8274-4a24-9887-d6345f88781c")
 			(effects
 				(font
 					(size 1 1)
@@ -3332,7 +3331,7 @@
 		(property "Value" "10uF"
 			(at 0 2.3 0)
 			(layer "F.Fab")
-			(uuid "292e2cb0-6b69-4e4f-aa6c-63f79e1bb595")
+			(uuid "12673824-eeb1-493e-a252-8f4c70d17053")
 			(effects
 				(font
 					(size 1 1)
@@ -3344,7 +3343,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "6456dda3-96b8-45a5-91bd-99a0d1b4931c")
+			(uuid "84940334-1710-4985-80f2-120fad40bd06")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3355,7 +3354,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "929eb5ba-bf20-4dc6-a581-152fd5de0881")
+			(uuid "eb836efa-e6d2-48d4-b77e-00ca599fd324")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7379,7 +7378,7 @@
 	(footprint "Capacitor_SMD:CP_Elec_8x10"
 		(layer "F.Cu")
 		(uuid "a5a71039-23bc-46c0-a275-ea7565f66545")
-		(at 233.25 71.5)
+		(at 233.71 71.5)
 		(descr "SMD capacitor, aluminum electrolytic, Nichicon, 8.0x10mm")
 		(tags "capacitor electrolytic")
 		(property "Reference" "C_OUT_LF1"
@@ -11850,6 +11849,8 @@
 		(fill
 			(thermal_gap 0.5)
 			(thermal_bridge_width 0.5)
+			(smoothing fillet)
+			(radius 1)
 			(island_removal_mode 0)
 		)
 		(polygon
@@ -11899,6 +11900,56 @@
 		(polygon
 			(pts
 				(xy 240 84.07) (xy 240 54) (xy 180 54) (xy 180 83.75)
+			)
+		)
+	)
+	(zone
+		(net "/SHUNT_P")
+		(layer "F.Cu")
+		(uuid "dbb8de4c-bdb0-4076-bcb0-b6613d60f2ea")
+		(name "Shunt_P")
+		(hatch edge 0.5)
+		(priority 3)
+		(connect_pads yes
+			(clearance 0.5)
+		)
+		(min_thickness 0.25)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(smoothing fillet)
+			(radius 3)
+			(island_removal_mode 0)
+		)
+		(polygon
+			(pts
+				(xy 205.52 67.16) (xy 205.46 63.62) (xy 219.665365 63.634449) (xy 219.618637 85.216566) (xy 215.525599 85.198429)
+				(xy 215.597263 69.025974) (xy 215.592363 67.133916)
+			)
+		)
+	)
+	(zone
+		(net "/SHUNT_N")
+		(layer "F.Cu")
+		(uuid "f9d63e99-e45a-4c08-914b-cb573e53b806")
+		(name "V_OUT")
+		(hatch edge 0.5)
+		(priority 4)
+		(connect_pads yes
+			(clearance 0.5)
+		)
+		(min_thickness 0.25)
+		(fill
+			(thermal_gap 0.5)
+			(thermal_bridge_width 0.5)
+			(smoothing fillet)
+			(radius 3)
+			(island_removal_mode 0)
+		)
+		(polygon
+			(pts
+				(xy 219.97 85.22) (xy 232.986244 85.231023) (xy 233.01 57.18) (xy 227.731625 57.166182) (xy 227.668281 81.363943)
+				(xy 220.02 81.34) (xy 220.013417 81.820561)
 			)
 		)
 	)
