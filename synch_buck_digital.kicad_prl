@@ -5,7 +5,6 @@
     "auto_track_width": true,
     "hidden_netclasses": [],
     "hidden_nets": [
-      "+5V",
       "SGND",
       "PGND",
       "/SHUNT_N",
@@ -61,7 +60,7 @@
       "board_outline_area",
       "ly_points"
     ],
-    "visible_layers": "ffffffff_ffffffff_ffffffff_ffffffdf",
+    "visible_layers": "ffffffff_ffffffff_ffffffff_ffffff8b",
     "zone_display_mode": 0
   },
   "git": {
