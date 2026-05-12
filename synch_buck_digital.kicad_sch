@@ -887,42 +887,6 @@
 					)
 				)
 				(pin passive line
-					(at -8.89 0 0)
-					(length 3.81)
-					(name "Pin_3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -8.89 -12.7 0)
-					(length 3.81)
-					(name "Pin_8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
 					(at -8.89 -5.08 0)
 					(length 3.81)
 					(name "Pin_5"
@@ -932,7 +896,7 @@
 							)
 						)
 					)
-					(number "3"
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -950,7 +914,25 @@
 							)
 						)
 					)
-					(number "4"
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -8.89 -10.16 0)
+					(length 3.81)
+					(name "Pin_7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -968,6 +950,24 @@
 							)
 						)
 					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -8.89 0 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
 					(number "5"
 						(effects
 							(font
@@ -977,9 +977,9 @@
 					)
 				)
 				(pin passive line
-					(at -8.89 -10.16 0)
+					(at -8.89 -12.7 0)
 					(length 3.81)
-					(name "Pin_7"
+					(name "Pin_8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4172,6 +4172,12 @@
 		(uuid "22f0a1ff-e0d6-4ef3-b1cd-768bd4177713")
 	)
 	(junction
+		(at 219.71 82.55)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "32aaa90c-c9d9-4d3a-9a3f-6acf0e33f853")
+	)
+	(junction
 		(at 370.84 156.21)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4254,6 +4260,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9b6c77f1-84b4-41f1-80d7-5912d33c17ab")
+	)
+	(junction
+		(at 176.53 64.77)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9cc1171c-9b31-4233-91e4-02ccb7a2fd79")
 	)
 	(junction
 		(at 363.22 156.21)
@@ -4389,6 +4401,16 @@
 	)
 	(wire
 		(pts
+			(xy 219.71 80.01) (xy 219.71 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09bf68c5-e13c-46af-95d3-15f9adcb8ef2")
+	)
+	(wire
+		(pts
 			(xy 176.53 59.69) (xy 177.8 59.69)
 		)
 		(stroke
@@ -4396,6 +4418,16 @@
 			(type default)
 		)
 		(uuid "0e45c9eb-7d93-4695-8172-4e06f9e026c9")
+	)
+	(wire
+		(pts
+			(xy 218.44 80.01) (xy 219.71 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f98d9ef-fa4d-412b-b638-aabd929fcf83")
 	)
 	(wire
 		(pts
@@ -4586,6 +4618,16 @@
 			(type default)
 		)
 		(uuid "54557024-e479-4b4f-8737-b6880d7c3a63")
+	)
+	(wire
+		(pts
+			(xy 177.8 67.31) (xy 176.53 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5b14517d-ebf1-46da-b599-735542823e5b")
 	)
 	(wire
 		(pts
@@ -5136,6 +5178,16 @@
 			(type default)
 		)
 		(uuid "debc613d-438d-41f9-a8eb-44ca3daba323")
+	)
+	(wire
+		(pts
+			(xy 176.53 67.31) (xy 176.53 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e528079b-b6c7-41fc-82f1-5e25c4c4f054")
 	)
 	(wire
 		(pts
@@ -6604,7 +6656,7 @@
 				)
 			)
 		)
-		(property "Value" "SGND"
+		(property "Value" "PGND"
 			(at 368.554 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7167,7 +7219,7 @@
 				)
 			)
 		)
-		(property "Value" "SGND"
+		(property "Value" "PGND"
 			(at 176.276 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7326,7 +7378,7 @@
 				)
 			)
 		)
-		(property "Value" "SGND"
+		(property "Value" "PGND"
 			(at 352.044 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10476,7 +10528,7 @@
 				)
 			)
 		)
-		(property "Value" "SGND"
+		(property "Value" "PGND"
 			(at 334.264 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11201,7 +11253,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FET:PG-TDSON-8_INF"
+		(property "Footprint" "PG-TDSON-8_INF"
 			(at 177.8 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -11259,6 +11311,9 @@
 		)
 		(pin "7"
 			(uuid "5c4efb4a-da49-4885-98cb-b11ab66df2fc")
+		)
+		(pin "9"
+			(uuid "fb52b8a6-4f1e-43e8-ba57-d03587042bc5")
 		)
 		(instances
 			(project "synch_buck_digital"
@@ -11380,7 +11435,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FET:PG-TDSON-8_INF"
+		(property "Footprint" "PG-TDSON-8_INF"
 			(at 218.44 64.77 0)
 			(hide yes)
 			(show_name no)
@@ -11438,6 +11493,9 @@
 		)
 		(pin "5"
 			(uuid "1e23e51a-d299-4cd4-ace4-5c24462d5759")
+		)
+		(pin "9"
+			(uuid "4b772a62-0c82-4fe7-9b5c-385d2b432055")
 		)
 		(instances
 			(project "synch_buck_digital"
