@@ -1,14 +1,10 @@
 {
   "board": {
-    "active_layer": 2,
+    "active_layer": 25,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
-    "hidden_nets": [
-      "/SHUNT_N",
-      "/SHUNT_P",
-      "/SW"
-    ],
+    "hidden_nets": [],
     "high_contrast_mode": 0,
     "net_color_mode": 1,
     "opacity": {
@@ -17,7 +13,7 @@
       "shapes": 1.0,
       "tracks": 1.0,
       "vias": 1.0,
-      "zones": 0.5299999713897705
+      "zones": 0.6
     },
     "prototype_zone_fills": false,
     "selection_filter": {
@@ -36,16 +32,21 @@
     "visible_items": [
       "vias",
       "footprint_text",
+      "footprint_anchors",
       "ratsnest",
       "grid",
       "footprints_front",
       "footprints_back",
       "footprint_values",
+      "footprint_references",
       "tracks",
+      "drc_errors",
       "drawing_sheet",
       "bitmaps",
       "pads",
       "zones",
+      "drc_warnings",
+      "drc_exclusions",
       "locked_item_shadows",
       "conflict_shadows",
       "shapes",
@@ -62,13 +63,11 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "synch_buck_digital.kicad_prl",
+    "filename": "Fet Stencil.kicad_prl",
     "version": 5
   },
   "net_inspector_panel": {
     "col_hidden": [
-      false,
-      false,
       false,
       false,
       false,
@@ -90,23 +89,19 @@
       6,
       7,
       8,
-      9,
-      10,
-      11
+      9
     ],
     "col_widths": [
       222,
       207,
-      136,
+      137,
       92,
-      136,
-      136,
-      136,
+      137,
+      137,
+      137,
       98,
-      182,
-      200,
-      136,
-      136
+      137,
+      137
     ],
     "custom_group_rules": [],
     "expanded_rows": [],
