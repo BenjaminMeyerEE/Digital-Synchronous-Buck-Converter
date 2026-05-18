@@ -2556,6 +2556,26 @@
 					)
 				)
 			)
+			(symbol "BSC066N06NSATMA1_1_1"
+				(pin passive line
+					(at 40.64 2.54 180)
+					(length 7.62)
+					(name "EP"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
 			(embedded_fonts no)
 		)
 		(symbol "INA241A3:INA241A3IDDFR"
@@ -7277,7 +7297,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 275.59 210.82 180)
+		(at 290.83 210.82 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7287,7 +7307,7 @@
 		(dnp no)
 		(uuid "445a2d4b-90d6-4651-98d8-ef23981fffd3")
 		(property "Reference" "R2_DT1"
-			(at 277.114 209.55 0)
+			(at 292.354 209.55 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7298,7 +7318,7 @@
 			)
 		)
 		(property "Value" "1KR"
-			(at 277.114 212.3441 0)
+			(at 292.354 212.3441 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7309,7 +7329,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 274.574 210.566 90)
+			(at 289.814 210.566 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7320,7 +7340,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 275.59 210.82 0)
+			(at 290.83 210.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7331,7 +7351,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 275.59 210.82 0)
+			(at 290.83 210.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11313,7 +11333,7 @@
 			(uuid "5c4efb4a-da49-4885-98cb-b11ab66df2fc")
 		)
 		(pin "9"
-			(uuid "fb52b8a6-4f1e-43e8-ba57-d03587042bc5")
+			(uuid "fd310576-59a0-48b6-a23a-e57268db1ad5")
 		)
 		(instances
 			(project "synch_buck_digital"
@@ -11495,7 +11515,7 @@
 			(uuid "1e23e51a-d299-4cd4-ace4-5c24462d5759")
 		)
 		(pin "9"
-			(uuid "4b772a62-0c82-4fe7-9b5c-385d2b432055")
+			(uuid "cab6cc03-9ea7-43a7-a69c-03b31aa7cfed")
 		)
 		(instances
 			(project "synch_buck_digital"
@@ -12550,7 +12570,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 290.83 210.82 0)
+		(at 275.59 210.82 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12560,7 +12580,7 @@
 		(dnp no)
 		(uuid "e13f0cdf-0ebe-4118-a7b9-e2267df50edb")
 		(property "Reference" "R1_DT1"
-			(at 300.228 209.55 0)
+			(at 284.988 209.55 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12571,7 +12591,7 @@
 			)
 		)
 		(property "Value" "3.9KR"
-			(at 298.958 212.344 0)
+			(at 283.718 212.344 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12582,7 +12602,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 291.846 211.074 90)
+			(at 276.606 211.074 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12593,7 +12613,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 290.83 210.82 0)
+			(at 275.59 210.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12604,7 +12624,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 290.83 210.82 0)
+			(at 275.59 210.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
