@@ -1,10 +1,50 @@
-*-backups/
+# ── KiCad ─────────────────────────────────────────────────────────────
+# Local UI/session state (open tabs, zoom, selection) — per-machine, churns constantly
 *.kicad_prl
+
+# Backups and autosaves
+*-backups/
 *.bak
 *.kicad_sch-bak
 *.kicad_pcb-bak
-fp-info-cache
-~*.lck
 _autosave-*
+~*.lck
+
+# Caches and exports regenerated from the schematic/PCB
+fp-info-cache
+*.net
+
+# ── Fabrication toolkit ───────────────────────────────────────────────
+# SQLite cache written by the JLCPCB fabrication-toolkit plugin
+fabrication/jlcpcb/project.db
+
+# ── Firmware build artifacts (EWARM / CubeIDE / GCC) ──────────────────
+firmware/EWARM/settings/
+firmware/EWARM/Debug/
+Debug/
+Release/
+build/
+*.dep
+*.ewt
+*.o
+*.d
+*.su
+*.elf
+*.map
+*.hex
+*.bin
+*.list
+
+# ── IDE / editor metadata ─────────────────────────────────────────────
+.settings/
+.project
+.cproject
+.vscode/
+.idea/
 .history/
 .claude/
+
+# ── OS / OneDrive junk ────────────────────────────────────────────────
+Thumbs.db
+desktop.ini
+.DS_Store
