@@ -5,6 +5,8 @@
 # Keeps GitHub's language stats and diffs focused on the actual firmware.
 firmware/Drivers/**                   linguist-vendored
 firmware/EWARM/startup_stm32g474xx.s  linguist-vendored
+test-firmware/Drivers/**              linguist-vendored
+test-firmware/EWARM/startup_stm32g474xx.s  linguist-vendored
 
 # KiCad design files are text, but their diffs are unreadable s-expressions
 *.kicad_pcb   -diff
