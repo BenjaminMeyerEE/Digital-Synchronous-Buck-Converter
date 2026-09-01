@@ -1810,7 +1810,7 @@
 			(uuid "d39c723d-8119-4395-9938-b79776696579")
 		)
 		(embedded_fonts no)
-		(model "C:/Users/brmey/Downloads/TLV3603DCKR (1)/TLV3603DCKR.STEP"
+		(model "${KIPRJMOD}/3dmodels/TLV3603DCKR.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -2600,7 +2600,7 @@
 			(uuid "749a674e-8eec-4dbb-b5a4-5b262a1fd7cc")
 		)
 		(embedded_fonts no)
-		(model "C:/Users/brmey/Downloads/395930602_stp/395930602.stp"
+		(model "${KIPRJMOD}/3dmodels/TerminalBlock_MX126-5.0-02P.step"
 			(offset
 				(xyz 2.3 -0.5 6)
 			)
@@ -5390,7 +5390,7 @@
 			(uuid "afce2436-315d-416d-8987-ea058da17f8d")
 		)
 		(embedded_fonts no)
-		(model "C:/Users/brmey/Downloads/395930602_stp/395930602.stp"
+		(model "${KIPRJMOD}/3dmodels/TerminalBlock_MX126-5.0-02P.step"
 			(offset
 				(xyz 2.3 0.5 6)
 			)
@@ -6011,7 +6011,7 @@
 			(uuid "5f846fc2-d37f-4854-8e1c-c48b9f08b444")
 		)
 		(embedded_fonts no)
-		(model "C:/Users/brmey/Downloads/TLV3603DCKR (1)/TLV3603DCKR.STEP"
+		(model "${KIPRJMOD}/3dmodels/TLV3603DCKR.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -6566,7 +6566,7 @@
 			(uuid "c0979145-9e28-418c-95b5-a645a3ad081e")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_SON.3dshapes/Infineon_PG-TDSON-8_6.15x5.15mm.step"
+		(model "${KIPRJMOD}/3dmodels/Infineon_PG-TDSON-8.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -9342,7 +9342,7 @@
 			(uuid "e756595b-5fd0-4e11-92d7-694409a9e3b1")
 		)
 		(embedded_fonts no)
-		(model "C:/Users/brmey/Downloads/INA241A3IDDFR.STEP"
+		(model "${KIPRJMOD}/3dmodels/INA241A3IDDFR.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -11583,7 +11583,7 @@
 			(uuid "a5239f28-cdf3-4b97-8525-6636dfaf572d")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_SON.3dshapes/Infineon_PG-TDSON-8_6.15x5.15mm.step"
+		(model "${KIPRJMOD}/3dmodels/Infineon_PG-TDSON-8.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -12769,7 +12769,7 @@
 			(uuid "a4ca1e0c-07ab-4c95-9f50-56ee94a8e2fb")
 		)
 		(embedded_fonts no)
-		(model "C:/Users/brmey/Downloads/UCC27211D.STEP"
+		(model "${KIPRJMOD}/3dmodels/UCC27211D.step"
 			(offset
 				(xyz 0 0 0)
 			)
