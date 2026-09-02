@@ -14,7 +14,7 @@ Run all commands from the repository root.
 Isometric view (README header):
 
     kicad-cli pcb render -o docs/board-iso.png --quality high --perspective \
-      --rotate '-30,0,-35' --zoom 0.9 --width 2000 --height 1500 \
+      --rotate '-30,0,-35' --zoom 0.7 --width 2000 --height 1500 \
       --background transparent hardware/synch_buck_digital.kicad_pcb
 
 Top-down view:
