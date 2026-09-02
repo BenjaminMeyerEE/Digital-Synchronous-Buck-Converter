@@ -65,10 +65,13 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN EV */
-/* CubeMonitor variables owned by main.c, updated by the TIM3 capture handler */
-extern volatile uint8_t  mon_dt_out_state;      /* live DT_OUT comparator level        */
+/* CubeMonitor variables owned by main.c, updated by the TIM3 capture handler
+   (mon_dt_out_state is owned/polled by the main loop only — not written here) */
 extern volatile uint32_t mon_dt_edge_count;     /* total DT_OUT edges captured by TIM3 */
 extern volatile uint32_t mon_dt_pulse_width_ns; /* last DT_OUT high-pulse width [ns]   */
+/* system state owned by main.c, latched to FAULT by the lean DMA error path  */
+extern volatile uint8_t  mon_sys_state;         /* sys_state_t                         */
+extern volatile uint8_t  mon_fault_latched;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -215,7 +218,32 @@ void SysTick_Handler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+  /* Lean dispatch of the 400 kHz control interrupt: the HAL_DMA_IRQHandler
+     call below is bypassed (unconditional return at the end of this block) —
+     its flag walk plus the DMA->ADC->ConvCplt callback indirection is pure
+     overhead inside a < 425-cycle budget. NDTR = 1 in circular mode sets HT
+     together with TC, so the stale HT flag is cleared alongside TC (the HT
+     interrupt enable itself is cleared once at start-up in main()).          */
+  uint32_t isr = DMA1->ISR;
 
+  if ((isr & DMA_ISR_TEIF1) != 0u)
+  {
+    /* DMA transfer error: hardware has already cleared the channel enable, so
+       the ADC sample stream is dead and the control ISR will never run again.
+       Kill the power stage and latch FAULT directly (lean DMA error path).   */
+    DMA1->IFCR = DMA_IFCR_CTEIF1;
+    TIM1->BDTR &= ~TIM_BDTR_MOE;
+    TIM1->CCR1 = 0u;
+    mon_fault_latched = 1u;
+    mon_sys_state = SYS_STATE_FAULT;
+  }
+
+  if ((isr & DMA_ISR_TCIF1) != 0u)
+  {
+    DMA1->IFCR = DMA_IFCR_CTCIF1 | DMA_IFCR_CHTIF1;
+    Buck_CtrlLoopISR();
+  }
+  return;
   /* USER CODE END DMA1_Channel1_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc1);
   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
@@ -243,7 +271,50 @@ void TIM1_BRK_TIM15_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
+  /* Lean DT_OUT edge-capture handler: the HAL_TIM_IRQHandler call below is
+     bypassed (unconditional return at the end of this block). At up to
+     2 x 400 kHz edges the HAL flag-walk + callback indirection (~130-160
+     cycles/edge) would starve the CPU. Direct register access, integer math
+     only, no function calls.
+     CH1 = direct TI1, rising edge; CH2 = indirect TI1, falling edge.
+     Reading CCRx clears the corresponding CCxIF flag.                        */
+  uint32_t sr  = TIM3->SR;
+  uint32_t ovc = sr & (TIM_SR_CC1OF | TIM_SR_CC2OF);   /* overcapture flags */
 
+  if ((sr & TIM_SR_CC1IF) != 0u)                       /* rising edge  */
+  {
+    dt_rise_ticks = (uint16_t)TIM3->CCR1;              /* read clears CC1IF */
+    dt_rise_seen  = 1u;
+    mon_dt_edge_count++;
+  }
+
+  if ((sr & TIM_SR_CC2IF) != 0u)                       /* falling edge */
+  {
+    uint16_t fall_ticks = (uint16_t)TIM3->CCR2;        /* read clears CC2IF */
+
+    mon_dt_edge_count++;
+
+    if ((dt_rise_seen != 0u) && (ovc == 0u))
+    {
+      /* wrap-aware uint16 delta, then ticks -> ns without floats.
+         Max value: 65535 * 100 / 17 = 385500 ns, well within uint32. */
+      uint16_t width_ticks = (uint16_t)(fall_ticks - dt_rise_ticks);
+      mon_dt_pulse_width_ns = ((uint32_t)width_ticks * DT_TICKS_TO_NS_NUM)
+                              / DT_TICKS_TO_NS_DEN;
+    }
+  }
+
+  if (ovc != 0u)
+  {
+    /* overcapture: edges were lost, so rise/fall pairing is unreliable.
+       Width computation was skipped above; drop the pending rising edge so
+       no width is produced until the next clean rising edge. SR bits are
+       rc_w0: writing 0 clears, writing 1 leaves untouched — this write
+       clears only the overcapture flags.                                    */
+    TIM3->SR = ~(TIM_SR_CC1OF | TIM_SR_CC2OF);
+    dt_rise_seen = 0u;
+  }
+  return;
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
@@ -265,44 +336,5 @@ void DMAMUX_OVR_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-/**
-  * @brief  TIM3 input-capture callback: DT_OUT (switching-activity comparator,
-  *         PB4, active high) edge monitor. Dispatched by HAL_TIM_IRQHandler
-  *         from TIM3_IRQHandler above.
-  *         CH1 = direct TI1, rising edge; CH2 = indirect TI1, falling edge.
-  *         Kept minimal: direct register reads, integer math only.
-  */
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-  if (htim->Instance == TIM3)
-  {
-    if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)        /* rising edge  */
-    {
-      dt_rise_ticks = (uint16_t)TIM3->CCR1;
-      dt_rise_seen  = 1u;
-      mon_dt_out_state = 1u;
-      mon_dt_edge_count++;
-    }
-    else if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2)   /* falling edge */
-    {
-      uint16_t fall_ticks = (uint16_t)TIM3->CCR2;
 
-      mon_dt_out_state = 0u;
-      mon_dt_edge_count++;
-
-      if (dt_rise_seen != 0u)
-      {
-        /* wrap-aware uint16 delta, then ticks -> ns without floats.
-           Max value: 65535 * 100 / 17 = 385500 ns, well within uint32. */
-        uint16_t width_ticks = (uint16_t)(fall_ticks - dt_rise_ticks);
-        mon_dt_pulse_width_ns = ((uint32_t)width_ticks * DT_TICKS_TO_NS_NUM)
-                                / DT_TICKS_TO_NS_DEN;
-      }
-    }
-    else
-    {
-      /* no other TIM3 capture channels configured */
-    }
-  }
-}
 /* USER CODE END 1 */

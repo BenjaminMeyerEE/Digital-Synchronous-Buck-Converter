@@ -219,9 +219,10 @@ int main(void)
   {
     Error_Handler();
   }
-  /* With NDTR = 1 the half-transfer event fires together with transfer-complete,
-     and HAL_DMA_IRQHandler services HT/TC in separate IRQ entries — that would
-     double the 400 kHz interrupt load for nothing. Only TC drives the loop.  */
+  /* With NDTR = 1 the half-transfer event fires together with transfer-complete;
+     left enabled it would double the 400 kHz interrupt load for nothing. Only
+     TC runs the lean dispatch in DMA1_Channel1_IRQHandler (stm32g4xx_it.c),
+     which clears the stale HT flag alongside TC.                              */
   __HAL_DMA_DISABLE_IT(&hdma_adc1, DMA_IT_HT);
 
   /* --- TIM3 input captures for the switching-activity comparator (DT_OUT/PB4).
@@ -1019,97 +1020,112 @@ static void app_arm_soft_start(void)
 }
 
 /**
-  * @brief  400 kHz control ISR. Fires from the DMA1_Channel1 transfer-complete
-  *         of the dual regular-simultaneous conversion (TIM1 TRGO triggered).
+  * @brief  400 kHz control-loop body. Called directly from
+  *         DMA1_Channel1_IRQHandler (stm32g4xx_it.c) on the transfer-complete
+  *         of the dual regular-simultaneous conversion (TIM1 TRGO triggered),
+  *         bypassing HAL DMA dispatch.
   *         Budget < 1 us: direct register access only, no divisions, no HAL calls.
   */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+void Buck_CtrlLoopISR(void)
 {
-  if (hadc->Instance == ADC1)
+  uint32_t raw   = adc_dual_raw;  /* ADC1 (V_FB) low half, ADC2 (SENSE_OUT) high half */
+  float    vout  = (float)(raw & 0x0FFFu) * ADC_RAW_TO_VOUT_V;
+  float    iout  = (float)((raw >> 16) & 0x0FFFu) * ADC_RAW_TO_AMPS;
+  uint8_t  state = mon_sys_state;
+
+  mon_vout_V    = vout;
+  mon_current_A = iout;
+
+  if ((state == SYS_STATE_SOFT_START) || (state == SYS_STATE_RUN))
   {
-    uint32_t raw   = adc_dual_raw;  /* ADC1 (V_FB) low half, ADC2 (SENSE_OUT) high half */
-    float    vout  = (float)(raw & 0x0FFFu) * ADC_RAW_TO_VOUT_V;
-    float    iout  = (float)((raw >> 16) & 0x0FFFu) * ADC_RAW_TO_AMPS;
-    uint8_t  state = mon_sys_state;
+    float duty_limit;
+    float error;
+    float integ;
+    float duty;
 
-    mon_vout_V    = vout;
-    mon_current_A = iout;
-
-    if ((state == SYS_STATE_SOFT_START) || (state == SYS_STATE_RUN))
+    if (state == SYS_STATE_SOFT_START)
     {
-      float duty_limit;
-      float error;
-      float integ;
-      float duty;
-
-      if (state == SYS_STATE_SOFT_START)
+      /* linear duty-limit ramp 0 -> duty_max over set_softstart_ms */
+      duty_limit = ctrl_duty_limit + ctrl_ss_increment;
+      if (duty_limit >= ctrl_duty_max_cached)
       {
-        /* linear duty-limit ramp 0 -> duty_max over set_softstart_ms */
-        duty_limit = ctrl_duty_limit + ctrl_ss_increment;
-        if (duty_limit >= ctrl_duty_max_cached)
-        {
-          duty_limit = ctrl_duty_max_cached;
-          mon_sys_state = SYS_STATE_RUN;      /* ramp complete: SOFT_START -> RUN */
-        }
-        ctrl_duty_limit = duty_limit;
+        duty_limit = ctrl_duty_max_cached;
+        /* ramp complete: signal the main loop, which performs the
+           SOFT_START -> RUN transition in a critical section. The ISR never
+           writes mon_sys_state (single ISR writer = the break/fault paths);
+           this branch keeps running harmlessly at the saturated limit until
+           the main loop transitions.                                        */
+        ctrl_ramp_done = 1u;
       }
-      else
-      {
-        duty_limit = ctrl_duty_max_cached;    /* clamped by the main loop */
-        ctrl_duty_limit = duty_limit;
-      }
-
-      /* PI with anti-windup: integrator and total output clamped to [0, duty_limit] */
-      error = set_vout_V - vout;
-      integ = ctrl_integrator + (error * set_ki * CTRL_TS_SEC);
-      if (integ > duty_limit)  { integ = duty_limit; }
-      else if (integ < 0.0f)   { integ = 0.0f; }
-      ctrl_integrator = integ;
-
-      duty = (set_kp * error) + integ;
-      if (duty > duty_limit)   { duty = duty_limit; }
-      else if (duty < 0.0f)    { duty = 0.0f; }
-
-      TIM1->CCR1 = (uint32_t)(duty * PWM_PERIOD_TICKS);
+      ctrl_duty_limit = duty_limit;
+    }
+    else
+    {
+      duty_limit = ctrl_duty_max_cached;    /* clamped by the main loop */
+      ctrl_duty_limit = duty_limit;
     }
 
-    /* PWM monitor variables (valid in every state) */
-    {
-      uint32_t ccr = TIM1->CCR1;
-      uint8_t  moe = ((TIM1->BDTR & TIM_BDTR_MOE) != 0u) ? 1u : 0u;
+    /* PI with anti-windup: integrator and total output clamped to [0, duty_limit].
+       NaN-rejecting form (!(x >= 0) is true for NaN): set_vout_V/set_kp/set_ki are
+       read raw here at 400 kHz, between main-loop clamp passes — a NaN written
+       over SWD must not stick in the integrator (NaN + x = NaN forever).        */
+    error = set_vout_V - vout;
+    integ = ctrl_integrator + (error * set_ki * CTRL_TS_SEC);
+    if (!(integ >= 0.0f))        { integ = 0.0f; }
+    else if (integ > duty_limit) { integ = duty_limit; }
+    ctrl_integrator = integ;
 
-      if (moe != 0u)
-      {
-        float hs_pct = (float)ccr * CCR_TO_PCT;
-        float ls_pct = 100.0f - hs_pct - PWM_DEADTIME_PCT;
-        if (ls_pct < 0.0f) { ls_pct = 0.0f; }
-        mon_pwm_hs_duty_pct = hs_pct;
-        mon_pwm_ls_duty_pct = ls_pct;
-      }
-      else
-      {
-        mon_pwm_hs_duty_pct = 0.0f;
-        mon_pwm_ls_duty_pct = 0.0f;
-      }
-      mon_pwm_hs_active = (uint8_t)((moe != 0u) && (ccr > 0u));
-      mon_pwm_ls_active = moe;
-    }
+    duty = (set_kp * error) + integ;
+    if (!(duty >= 0.0f))         { duty = 0.0f; }
+    else if (duty > duty_limit)  { duty = duty_limit; }
 
-    mon_ctrl_loop_count++;   /* heartbeat consumed by the main-loop IWDG gate */
+    TIM1->CCR1 = (uint32_t)(duty * PWM_PERIOD_TICKS);
   }
+
+  /* PWM monitor variables (valid in every state) */
+  {
+    uint32_t ccr = TIM1->CCR1;
+    uint8_t  moe = ((TIM1->BDTR & TIM_BDTR_MOE) != 0u) ? 1u : 0u;
+
+    if (moe != 0u)
+    {
+      float hs_pct = (float)ccr * CCR_TO_PCT;
+      float ls_pct = 100.0f - hs_pct - PWM_DEADTIME_PCT;
+      if (ls_pct < 0.0f) { ls_pct = 0.0f; }
+      mon_pwm_hs_duty_pct = hs_pct;
+      mon_pwm_ls_duty_pct = ls_pct;
+    }
+    else
+    {
+      mon_pwm_hs_duty_pct = 0.0f;
+      mon_pwm_ls_duty_pct = 0.0f;
+    }
+    mon_pwm_hs_active = (uint8_t)((moe != 0u) && (ccr > 0u));
+    mon_pwm_ls_active = moe;
+  }
+
+  mon_ctrl_loop_count++;   /* heartbeat consumed by the main-loop IWDG gate */
 }
 
 /**
   * @brief  TIM1 BRK2 event (BKIN2 = PA11 = PROT_OUT, overcurrent comparator,
-  *         active high). Hardware has already cleared MOE and, because
-  *         AutomaticOutput is disabled, keeps it latched off. Software only
-  *         latches the FAULT state — MOE is never re-enabled here.
+  *         active high). Hardware clears MOE on the break event, but that is
+  *         NOT sufficient here: a BRK2 pulse can be latched as a pended ISR
+  *         while the arming path's software MOE-enable executes AFTER the
+  *         hardware clear, so this callback can run with MOE back on. The
+  *         explicit unconditional disable below closes that race. MOE is
+  *         never re-enabled here (AutomaticOutput is disabled).
   */
 void HAL_TIMEx_Break2Callback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM1)
   {
+    __HAL_TIM_MOE_DISABLE_UNCONDITIONALLY(&htim1);
     TIM1->CCR1 = 0u;
+    /* mask the break interrupt source: while BKIN2 is held asserted the flag
+       re-pends immediately after every clear (IRQ storm). Re-armed only in
+       app_clear_fault() / app_arm_soft_start().                             */
+    __HAL_TIM_DISABLE_IT(htim, TIM_IT_BREAK);
     mon_fault_latched = 1u;
     mon_sys_state = SYS_STATE_FAULT;
   }
@@ -1124,7 +1140,10 @@ void HAL_TIMEx_BreakCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM1)
   {
+    __HAL_TIM_MOE_DISABLE_UNCONDITIONALLY(&htim1);
     TIM1->CCR1 = 0u;
+    /* same masking as the BRK2 path: BIF/B2IF share one enable bit (BIE) */
+    __HAL_TIM_DISABLE_IT(htim, TIM_IT_BREAK);
     mon_fault_latched = 1u;
     mon_sys_state = SYS_STATE_FAULT;
   }
@@ -1139,6 +1158,11 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  /* kill the power stage first: a persistent init failure must spin with both
+     gate outputs disabled. IWDG still resets after 2 s; the boot path never
+     touches MOE, so each reset loop is safe.                                  */
+  TIM1->BDTR &= ~TIM_BDTR_MOE;
+  TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE);
   __disable_irq();
   while (1)
   {
