@@ -59,6 +59,20 @@
 #define VOUT_SET_MAX_V          8.0f        /* V_FB divider saturates the ADC at ~8.15 V  */
 #define SOFTSTART_MS_MIN        1.0f        /* also guards the ramp-increment division    */
 #define SOFTSTART_MS_MAX        10000.0f
+
+/* --- Start-up hold ----------------------------------------------------------
+ * Nothing may be armed for this long after reset. Gives the input rail, the
+ * INA241 sense amp and the TLV3603 OC comparator (whose PROT_REF is only
+ * written once the main loop reaches app_apply_dac_refs()) time to settle, and
+ * gives the debugger time to take hold before the half-bridge can ever be
+ * energized. Enforced as a non-blocking gate on cmd_start rather than as a
+ * HAL_Delay(): the main loop must keep servicing the IWDG heartbeat gate and
+ * the CubeMonitor variables throughout the hold.                              */
+#define STARTUP_HOLD_MS         500u
+
+/* --- LD2 state indicator blink cadence (non-blocking) ----------------------- */
+#define LED_BLINK_SOFTSTART_MS  100u        /* fast blink while ramping                  */
+#define LED_BLINK_RUN_MS        500u        /* slow blink while regulating               */
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -122,6 +136,7 @@ static volatile uint8_t ctrl_ramp_done = 0u;      /* control ISR -> main loop: s
 static float dac_oc_applied_A = -1.0f;            /* last value written to PROT_REF (-1 forces first write) */
 static float dac_dt_applied_A = -1.0f;            /* last value written to DT_REF                           */
 static uint32_t iwdg_last_ctrl_count = 0u;        /* main-loop copy of the control heartbeat                */
+static uint32_t led_last_toggle_ms = 0u;          /* HAL_GetTick() at the last LD2 toggle (blink codes)     */
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -309,10 +324,18 @@ int main(void)
 
     if (cmd_start != 0u)
     {
-      cmd_start = 0u;
-      if ((mon_sys_state == SYS_STATE_IDLE) && (mon_interlock_oc_not_armed == 0u))
+      /* Start-up hold: refuse to arm until STARTUP_HOLD_MS has elapsed since
+         reset (see STARTUP_HOLD_MS). The command is deliberately NOT consumed
+         inside the hold, so a start requested early — e.g. a CubeMonitor write
+         landing right after an IWDG-driven reset — is honoured the moment the
+         hold expires instead of being silently dropped.                       */
+      if (HAL_GetTick() >= STARTUP_HOLD_MS)
       {
-        app_arm_soft_start();
+        cmd_start = 0u;
+        if ((mon_sys_state == SYS_STATE_IDLE) && (mon_interlock_oc_not_armed == 0u))
+        {
+          app_arm_soft_start();
+        }
       }
     }
 
@@ -338,14 +361,45 @@ int main(void)
       __enable_irq();
     }
 
-    /* --- fault indicator: LD2 on while latched in FAULT --------------------- */
-    if (mon_sys_state == SYS_STATE_FAULT)
+    /* --- LD2 state indicator ------------------------------------------------
+           The converter is driven from CubeMonitor, but the bench operator
+           still needs glance-able state with no debugger attached — the same
+           blink-code idea the open-loop bring-up firmware uses. Done off
+           HAL_GetTick() rather than HAL_Delay(): blocking here would stall the
+           command handling and the IWDG heartbeat gate below.
+             solid on   = FAULT (latched)
+             fast blink = SOFT_START (duty limit ramping)
+             slow blink = RUN (closed-loop regulation)
+             off        = INIT / IDLE (outputs off)                            */
     {
-      BSP_LED_On(LED_GREEN);
-    }
-    else
-    {
-      BSP_LED_Off(LED_GREEN);
+      uint8_t  led_state = mon_sys_state;          /* single volatile read     */
+      uint32_t now_ms    = HAL_GetTick();
+
+      if (led_state == SYS_STATE_FAULT)
+      {
+        BSP_LED_On(LED_GREEN);
+      }
+      else if (led_state == SYS_STATE_SOFT_START)
+      {
+        if ((now_ms - led_last_toggle_ms) >= LED_BLINK_SOFTSTART_MS)
+        {
+          led_last_toggle_ms = now_ms;
+          BSP_LED_Toggle(LED_GREEN);
+        }
+      }
+      else if (led_state == SYS_STATE_RUN)
+      {
+        if ((now_ms - led_last_toggle_ms) >= LED_BLINK_RUN_MS)
+        {
+          led_last_toggle_ms = now_ms;
+          BSP_LED_Toggle(LED_GREEN);
+        }
+      }
+      else
+      {
+        BSP_LED_Off(LED_GREEN);
+        led_last_toggle_ms = now_ms;   /* next blink starts a full period long */
+      }
     }
 
     /* --- IWDG: refresh only while the 400 kHz control ISR is alive.
@@ -935,16 +989,36 @@ static void app_apply_dac_refs(void)
   */
 static void app_enter_idle(void)
 {
+  /* Outputs off first: this is the one action that must not wait. */
   __HAL_TIM_MOE_DISABLE_UNCONDITIONALLY(&htim1);
-  htim1.Instance->CCR1 = 0u;
+
+  /* Everything below is ordered so the 400 kHz control ISR cannot undo it.
+     The ISR writes TIM1->CCR1 on every tick while mon_sys_state is
+     SOFT_START or RUN, so the state has to leave those values BEFORE the
+     compare is zeroed — otherwise a tick landing between the two writes
+     re-arms a non-zero CCR1 behind the stop. Same ordering rule the test
+     firmware uses when it clears power_stage_enabled ahead of stopping the
+     timer.                                                                  */
   __disable_irq();
-  ctrl_integrator = 0.0f;
-  ctrl_duty_limit = 0.0f;
-  ctrl_ramp_done  = 0u;
   if (mon_sys_state != SYS_STATE_FAULT)
   {
     mon_sys_state = SYS_STATE_IDLE;
   }
+  ctrl_integrator = 0.0f;
+  ctrl_duty_limit = 0.0f;
+  ctrl_ramp_done  = 0u;
+  htim1.Instance->CCR1 = 0u;
+  /* CCR1 has preload enabled (OC1PE, set by HAL_TIM_PWM_ConfigChannel), so the
+     write above only reaches the preload register: the active shadow keeps the
+     last running duty until the next update event. That update may never come
+     while the core is halted, because __HAL_DBGMCU_FREEZE_TIM1() stops the
+     counter at a breakpoint. Force the latch now so the stopped state is real
+     in hardware, not just pending. Safe here: MOE is already clear, so both
+     outputs sit at their OSSI idle level and the counter reset this UG causes
+     cannot glitch a gate. Same latch discipline the open-loop bring-up
+     firmware needed, where an unlatched CCR1 ran the first period at the stale
+     shadow value (100 % duty, high side full on).                             */
+  htim1.Instance->EGR = TIM_EGR_UG;
   __enable_irq();
 }
 
@@ -964,6 +1038,9 @@ static void app_clear_fault(void)
   {
     __HAL_TIM_MOE_DISABLE_UNCONDITIONALLY(&htim1);  /* already off — belt and braces */
     htim1.Instance->CCR1 = 0u;
+    /* latch the zero out of the CCR1 preload into the active shadow (MOE is
+       clear, so the counter reset cannot glitch a gate) — see app_enter_idle() */
+    htim1.Instance->EGR = TIM_EGR_UG;
     ctrl_integrator = 0.0f;
     ctrl_duty_limit = 0.0f;
     ctrl_ramp_done  = 0u;
@@ -1006,6 +1083,17 @@ static void app_arm_soft_start(void)
       ((GPIOA->IDR & (1u << 11)) == 0u))
   {
     htim1.Instance->CCR1 = 0u;
+    /* CRITICAL ORDERING: CCR1 is a preload register (OC1PE is set by
+       HAL_TIM_PWM_ConfigChannel), so the zero above does not reach the active
+       shadow until an update event. Force it in with UG BEFORE MOE is enabled
+       below — otherwise the first switching period after arming runs at the
+       stale shadow duty. That is exactly the failure the open-loop bring-up
+       firmware hit (CCR1 850 against ARR 424 = 100 % duty, high side full on),
+       and it is reachable here whenever TIM1 has been frozen by
+       __HAL_DBGMCU_FREEZE_TIM1() across a halt, so no update event refreshed
+       the shadow after the previous stop. Issuing UG while MOE is still clear
+       means the counter reset it causes cannot glitch a gate.                 */
+    htim1.Instance->EGR = TIM_EGR_UG;
     ctrl_integrator   = 0.0f;
     ctrl_duty_limit   = 0.0f;
     ctrl_ss_increment = increment;
@@ -1159,10 +1247,18 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   /* kill the power stage first: a persistent init failure must spin with both
-     gate outputs disabled. IWDG still resets after 2 s; the boot path never
-     touches MOE, so each reset loop is safe.                                  */
+     gate outputs off. IWDG still resets after 2 s; the boot path never touches
+     MOE, so each reset loop is safe.
+     Clearing MOE is the whole job, and CC1E/CC1NE are deliberately LEFT SET:
+     with OSSI enabled that makes TIM1 actively drive PA8/PA7 to their idle
+     level (OCIdleState/OCNIdleState = RESET -> low, both FETs off). Clearing
+     CC1E/CC1NE as well would put the channel in the "output disabled" row of
+     the complementary-output control table and release both gate pins to
+     high-Z, leaving the driver inputs floating next to a switching node. This
+     is the same OSSI reasoning the boot sequence in USER CODE 2 relies on.
+     Direct BDTR write, not __HAL_TIM_MOE_DISABLE, because that HAL macro is a
+     silent no-op while any CCx/CCxN channel is enabled.                       */
   TIM1->BDTR &= ~TIM_BDTR_MOE;
-  TIM1->CCER &= ~(TIM_CCER_CC1E | TIM_CCER_CC1NE);
   __disable_irq();
   while (1)
   {
