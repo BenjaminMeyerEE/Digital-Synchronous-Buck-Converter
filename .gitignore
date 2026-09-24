@@ -1,50 +1,77 @@
-# ── KiCad ─────────────────────────────────────────────────────────────
-# Local UI/session state (open tabs, zoom, selection) — per-machine, churns constantly
+# =============================================================================
+# KiCad
+# =============================================================================
+
+# Per-machine UI/session state (open tabs, zoom, selection)
 *.kicad_prl
 
-# Backups and autosaves
+# Backups, autosaves and lock files
 *-backups/
 *.bak
-*.kicad_sch-bak
 *.kicad_pcb-bak
+*.kicad_sch-bak
 _autosave-*
 ~*.lck
 
 # Caches and exports regenerated from the schematic/PCB
-fp-info-cache
 *.net
+fp-info-cache
 
-# ── Fabrication toolkit ───────────────────────────────────────────────
+# =============================================================================
+# Fabrication
+# =============================================================================
+
 # SQLite cache written by the JLCPCB fabrication-toolkit plugin
 fabrication/jlcpcb/project.db
 
-# ── Firmware build artifacts (EWARM / CubeIDE / GCC) ──────────────────
-firmware/EWARM/settings/
-firmware/EWARM/Debug/
+# =============================================================================
+# Firmware (EWARM / CubeIDE / GCC)
+# =============================================================================
+
+# Build output directories
 Debug/
 Release/
 build/
-*.dep
-*.ewt
-*.o
-*.d
-*.su
-*.elf
-*.map
-*.hex
-*.bin
-*.list
+firmware/EWARM/Debug/
+firmware/EWARM/settings/
 
-# ── IDE / editor metadata ─────────────────────────────────────────────
-.settings/
-.project
+# Object files and dependency info
+*.d
+*.dep
+*.o
+*.su
+
+# Linked images, maps and listings
+*.bin
+*.elf
+*.hex
+*.list
+*.map
+
+# EWARM browse/tag info
+*.ewt
+
+# =============================================================================
+# IDEs and editors
+# =============================================================================
+
+# Eclipse / STM32CubeIDE
 .cproject
-.vscode/
-.idea/
+.project
+.settings/
+
+# VS Code / JetBrains / local history
 .history/
+.idea/
+.vscode/
+
+# Claude Code
 .claude/
 
-# ── OS / OneDrive junk ────────────────────────────────────────────────
+# =============================================================================
+# Operating system / OneDrive
+# =============================================================================
+
+.DS_Store
 Thumbs.db
 desktop.ini
-.DS_Store
